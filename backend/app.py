@@ -1,11 +1,12 @@
 import os
 import tempfile
-import cv2                 
-import numpy as np         
+import cv2                  
+import numpy as np          
 import base64              
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+import uuid
 
 # Import your custom modules
 from src.image_processing.edges_1 import extract_contours
@@ -18,13 +19,10 @@ CORS(app)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_IMAGE_PATH = os.path.join(BASE_DIR, "data", "Images", "input1.jpg")
 
-# GLOBAL VARIABLE: Stores the full ABSOLUTE path to the current image
-current_image_path = DEFAULT_IMAGE_PATH
+# --- We removed the global current_image_path variable completely ---
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    global current_image_path
-    
     if 'image' not in request.files:
         return jsonify({"error": "No file part"}), 400
     
@@ -34,23 +32,35 @@ def upload_file():
         return jsonify({"error": "No selected file"}), 400
 
     if file:
-        filename = secure_filename(file.filename)
+        original_filename = secure_filename(file.filename)
+        
+        # --- NEW: Generate a unique ID and attach it to the filename ---
+        unique_filename = f"{uuid.uuid4().hex}_{original_filename}"
+        
         temp_dir = tempfile.gettempdir()
-        save_path = os.path.join(temp_dir, filename)
+        save_path = os.path.join(temp_dir, unique_filename)
         file.save(save_path)
-        current_image_path = save_path
-        print(f"Image saved to temp: {current_image_path}")
-        return jsonify({"message": "File uploaded successfully", "filename": filename})
+        
+        print(f"Image saved to temp: {save_path}")
+        
+        # --- NEW: Send this unique filename back to the browser ---
+        return jsonify({
+            "message": "File uploaded successfully", 
+            "filename": unique_filename
+        })
 
 @app.route("/coords")
 def get_coords():
-    global current_image_path
+    # --- NEW: Ask the browser which specific file it wants us to process ---
+    filename = request.args.get('filename')
     
-    if not os.path.exists(current_image_path):
-        print(f"File not found at {current_image_path}, reverting to default.")
-        current_path_to_use = DEFAULT_IMAGE_PATH
+    if filename:
+        current_path_to_use = os.path.join(tempfile.gettempdir(), filename)
+        if not os.path.exists(current_path_to_use):
+            print(f"File not found at {current_path_to_use}, reverting to default.")
+            current_path_to_use = DEFAULT_IMAGE_PATH
     else:
-        current_path_to_use = current_image_path
+        current_path_to_use = DEFAULT_IMAGE_PATH
 
     try:
         print("Processing image:", current_path_to_use)
