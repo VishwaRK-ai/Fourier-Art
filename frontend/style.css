@@ -1,0 +1,115 @@
+body {
+    margin: 0;
+    background-color: #111;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    display: flex;
+    height: 100vh;
+}
+
+#sidebar {
+    width: 300px;
+    background: #1b1b1b;
+    border-right: 1px solid #333;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+    overflow-y: auto;
+}
+
+#sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+#sidebar::-webkit-scrollbar-track {
+    background: #1b1b1b;
+}
+#sidebar::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background: #00ffea;
+}
+
+#sidebar h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #00ffea;
+}
+
+.control {
+    margin-bottom: 22px;
+}
+
+.control label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.control input[type="range"],
+.control input[type="color"] {
+    width: 100%;
+}
+
+.buttonGroup button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 6px;
+    background: #222;
+    border: 1px solid #00ffea;
+    color: #00ffea;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.buttonGroup button.active {
+    background: #00ffea;
+    color: #111;
+}
+
+#uploadBtn {
+    display: inline-block;
+    width: 95%;
+    padding: 10px;
+    background: #222;
+    border: 1px solid #00ffea;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #00ffea;
+    text-align: center;
+}
+
+#uploadBtn:hover {
+    background: #00ffea;
+    color: #111;
+}
+
+#imageInput {
+    display: none;
+}
+
+#uploadStatus {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #00ffea;
+    word-break: break-word;
+}
+
+#uploadedImage {
+    display: none;
+    margin-top: 10px;
+    max-width: 100%;
+    border: 1px solid #00ffea;
+    border-radius: 6px;
+}
+
+#canvasContainer {
+    flex: 1;
+    position: relative;
+}
+
+canvas {
+    display: block;
+}

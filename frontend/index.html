@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fourier Epicycles</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="sidebar">
+
+    <h2>Fourier Epicycles</h2>
+
+    <div class="control">
+        <label>Image</label>
+
+        <label id="uploadBtn">
+            Upload Image
+            <input type="file" id="imageInput" accept="image/*">
+        </label>
+
+        <div id="uploadStatus">No file uploaded</div>
+
+        <img id="uploadedImage">
+
+        <div id="contourContainer" style="display:none; margin-top:15px; border-top:1px solid #333; padding-top:10px;">
+            <label>Generated Contours</label>
+            <img id="contourImage" style="margin-top:5px; width:100%; border:1px solid #00ffea; border-radius:6px; background: white;">
+        </div>
+    </div>
+    
+
+    <div class="control">
+        <label>Camera Mode</label>
+        <div class="buttonGroup">
+            <button id="camStatic" class="active">Static Camera</button>
+            <button id="camFollow">Follow Tip</button>
+        </div>
+    </div>
+
+    <div class="control">
+        <label>Number of Epicycles (K)</label>
+        <input id="kSlider" type="range" min="5" max="5000" value="200" step="1">
+    </div>
+
+    <div class="control">
+        <label>Scale (Zoom)</label>
+        <input id="scaleSlider" type="range" min="0.5" max="15" value="1" step="0.05">
+    </div>
+
+    <div class="control">
+        <label>Speed</label>
+        <input id="speedSlider" type="range" min="0.01" max="10" value="1" step="0.05">
+    </div>
+
+    <hr style="border:1px solid #333">
+
+    <div class="control">
+        <label>Drawing Line Width</label>
+        <input id="drawWidthSlider" type="range" min="0.2" max="6" value="2" step="0.1">
+    </div>
+
+    <div class="control">
+        <label>Epicycle Radius Width</label>
+        <input id="circleWidthSlider" type="range" min="0.2" max="4" value="1" step="0.1">
+    </div>
+
+    <div class="control">
+        <label>Fade Strength</label>
+        <input id="fadeSlider" type="range" min="0.02" max="0.75" value="0.25" step="0.01">
+    </div>
+
+    <div class="control">
+        <label>Path Color</label>
+        <input id="pathColorPicker" type="color" value="#ff0080">
+    </div>
+
+    <div class="control">
+        <label>Epicycle Color</label>
+        <input id="circleColorPicker" type="color" value="#00ffea">
+    </div>
+
+</div>
+
+<div id="canvasContainer">
+    <canvas id="canvas"></canvas>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
