@@ -73,7 +73,7 @@ imageInput.addEventListener("change", async () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    await fetch("http://127.0.0.1:5000/upload", {
+    await fetch("https://fourier-art-api.onrender.com/upload", {
         method: "POST",
         body: formData
     });
@@ -84,7 +84,7 @@ imageInput.addEventListener("change", async () => {
 });
 
 async function fetchCoords() {
-    const res = await fetch("http://127.0.0.1:5000/coords");
+    const res = await fetch("https://fourier-art-api.onrender.com/coords");
     const data = await res.json();
     if (data.error) return;
 
