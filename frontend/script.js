@@ -13,6 +13,8 @@ let fourier = [];
 let path = [];
 let time = 0;
 
+let currentServerFilename = ""; 
+
 let K = 200;
 let scale = 1;
 let speed = 1;
@@ -33,7 +35,6 @@ const speedSlider = document.getElementById("speedSlider");
 const imageInput = document.getElementById("imageInput");
 const uploadStatus = document.getElementById("uploadStatus");
 const uploadedImage = document.getElementById("uploadedImage");
-// NEW: Select contour elements
 const contourImage = document.getElementById("contourImage");
 const contourContainer = document.getElementById("contourContainer");
 
@@ -65,7 +66,6 @@ imageInput.addEventListener("change", async () => {
     uploadedImage.src = URL.createObjectURL(file);
     uploadedImage.style.display = "block";
     
-    // NEW: Hide contour preview while uploading new image
     contourContainer.style.display = "none";
     
     uploadStatus.textContent = "Uploading: " + file.name + "...";
@@ -73,10 +73,16 @@ imageInput.addEventListener("change", async () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    await fetch("https://fourier-art-api.onrender.com/upload", {
+    const response = await fetch("https://fourier-art-api.onrender.com/upload", {
         method: "POST",
         body: formData
     });
+    
+    const data = await response.json();
+    
+    if (data.filename) {
+        currentServerFilename = data.filename;
+    }
 
     uploadStatus.textContent = "Uploaded: " + file.name;
 
@@ -84,11 +90,15 @@ imageInput.addEventListener("change", async () => {
 });
 
 async function fetchCoords() {
-    const res = await fetch("https://fourier-art-api.onrender.com/coords");
+    const url = currentServerFilename 
+        ? `https://fourier-art-api.onrender.com/coords?filename=${currentServerFilename}` 
+        : "https://fourier-art-api.onrender.com/coords";
+
+    const res = await fetch(url);
+    
     const data = await res.json();
     if (data.error) return;
 
-    // NEW: Show contour image if available
     if (data.contour_image) {
         contourImage.src = data.contour_image;
         contourContainer.style.display = "block";
